@@ -63,3 +63,83 @@
         public string ActionType { get; set; }
 
 
+sql.................
+
+
+
+
+Alter procedure CRUDUsers
+@Id int=null,
+@Name nvarchar(100)=null,
+@Age nvarchar(100)=null,
+@Gender nvarchar(100)=null,
+@Email nvarchar(100)=null,
+@Address nvarchar(100)=null,
+@Country nvarchar(100)=null,
+@ActionType nvarchar(100)
+AS
+Begin
+IF @ActionType='Insert'
+Begin
+if Exists(select * from username where name=@Name)
+Begin
+	Select 0 as 'Success', 'Record already exisits' as 'MSG'
+End
+else if Exists(select * from username where email=@Email)
+Begin
+	Select 0 as 'Success', 'Record already exisits' as 'MSG'
+End
+
+Else
+Begin
+Insert into username(name,age,gender,email,[address],country)
+Values(@Name,@Age,@Gender,@Email,@Address,@Country)
+
+Select 1 as 'Success', 'Record has been inserted successfully' as 'MSG'
+ENd
+
+END
+ELSE IF @ActionType='getALL'
+Begin
+Select * from username
+END
+
+ELSE IF @ActionType='Update'
+Begin
+update username set name=@Name, age=@Age,gender=@Gender,email=@Email,address=@address,country=@Country where id=@id
+Select 1 as 'Success', 'Record has been updated successfully' as 'MSG'
+END
+
+else if @ActionType='Delete'
+begin
+delete from username where id=@id
+Select 1 as 'Success', 'Record has been deleted successfully' as 'MSG'
+end
+else if @ActionType='FillById'
+begin
+select * from username  where id=@id
+end
+
+else if @ActionType='get'
+begin
+select id, name from countrytab 
+end
+
+
+else if @ActionType='getcountry' 
+
+
+begin
+ DECLARE @countryid INT
+select id,name,countryid from statetab where countryid=@countryid
+end
+End
+
+
+
+
+
+
+
+
+
